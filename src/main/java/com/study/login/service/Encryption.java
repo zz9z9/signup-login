@@ -5,7 +5,15 @@ import java.security.SecureRandom;
 
 public abstract class Encryption {
 
+    private String hashingAlgorithm;
     private final int SALT_SIZE = 16;
+
+    public Encryption() {
+    }
+
+    public Encryption(String hashingAlgorithm) {
+        this.hashingAlgorithm = hashingAlgorithm;
+    }
 
     public abstract String getEncryptedPassword(String pw, String salt) throws NoSuchAlgorithmException;
 
