@@ -8,10 +8,13 @@ import java.security.NoSuchAlgorithmException;
 @Component
 public class HashFunction extends Encryption {
 
+    public HashFunction() {
+        super(HashAlgorithm.SHA256);
+    }
+
     @Override
     public String getEncryptedPassword(String password, String salt) throws NoSuchAlgorithmException {
-        String hashAlgorithm = HashingAlgorithm.SHA256.getValue();
-        MessageDigest md = MessageDigest.getInstance(hashAlgorithm);
+        MessageDigest md = MessageDigest.getInstance(hashAlgorithm.getValue());
         byte[] pw = password.getBytes();
 
         // key-stretching
