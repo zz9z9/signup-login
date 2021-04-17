@@ -1,18 +1,36 @@
 package com.study.login.service;
 
-import org.springframework.stereotype.Component;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
-@Component
-public class Encryption {
+public abstract class Encryption {
 
-    private String hashingAlgorithm = HashingAlgorithm.SHA256.getValue();
+    private String hashingAlgorithm;
+    private final int SALT_SIZE = 16;
 
-    public String getEncryptedPassword(String pw, String salt) {
-        return null;
+    public Encryption() {
     }
 
+    public Encryption(String hashingAlgorithm) {
+        this.hashingAlgorithm = hashingAlgorithm;
+    }
+
+    public abstract String getEncryptedPassword(String pw, String salt) throws NoSuchAlgorithmException;
+
     public String getSalt() {
-        return null;
+        SecureRandom rnd = new SecureRandom();
+        byte[] byteSalt = new byte[SALT_SIZE];
+        rnd.nextBytes(byteSalt);
+
+        return byteToString(byteSalt);
+    }
+
+    public String byteToString(byte[] byteSalt) {
+        StringBuilder sb = new StringBuilder();
+        for(byte b : byteSalt) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
 }
