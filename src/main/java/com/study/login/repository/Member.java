@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "MEMBER")
-public class MemberJpo {
+public class Member {
 
     @Id
     private String id;

@@ -23,6 +23,7 @@ public class LoginController {
         String pw = (String) params.get("userPw");
 
         memberService.save(new MemberDto(id,pw));
+
         return id;
     }
 
