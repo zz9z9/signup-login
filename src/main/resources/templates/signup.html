@@ -3,14 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <body>
 <h2>회원가입 페이지 입니다</h2><br>
-아이디 : <input><button>중복체크</button><br>
-비밀번호 : <input><br>
+아이디 : <input id="userId">
+<button>중복체크</button>
+<br>
+비밀번호 : <input id="userPw" type="password"><br>
 비밀번호 확인 : <input><br>
 
-<button>완료</button><button>취소</button>
+<button onclick=signUp()>완료</button>
+<button>취소</button>
 
+<script th:inline="javascript">
+    function signUp() {
+        const userId = $("#userId").val();
+        const userPw = $("#userPw").val();
+        const memberDto = {
+            userId,
+            userPw
+        };
+        $.ajax({
+            url: '/signup',
+            contentType: 'application/json',
+            data: JSON.stringify(memberDto),
+            type: "POST",
+        }).done(function () {
+            alert("회원가입 완료!");
+        });
+    }
+</script>
 </body>
 </html>
