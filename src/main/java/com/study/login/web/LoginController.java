@@ -27,18 +27,24 @@ public class LoginController {
     }
 
     @PostMapping("signup")
-    public String signUp(@RequestBody Map<String,Object> params, HttpSession session) {
+    public String signUp(@RequestBody Map<String,Object> params) {
         String id = (String) params.get("userId");
         String pw = (String) params.get("userPw");
 
-        // System.out.println("params : "+params);
-
         memberService.save(new MemberDto(id,pw));
 
-        session.setAttribute("loginId", id);
-        // session.setMaxInactiveInterval(30); // 세션 지속 시간
+        return "redirect:/";
+    }
 
-        return null;
+    @PostMapping("login")
+    public String login(@RequestBody Map<String,Object> params, HttpSession session) {
+        String id = (String) params.get("userId");
+        String pw = (String) params.get("userPw");
+        MemberDto member = new MemberDto(id,pw);
+
+        memberService.login(member, session);
+
+        return "redirect:/main";
     }
 
     @GetMapping("main")
