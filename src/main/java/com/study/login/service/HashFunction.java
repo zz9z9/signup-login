@@ -13,13 +13,19 @@ public class HashFunction extends Encryption {
     }
 
     @Override
-    public String getEncryptedPassword(String password, String salt) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance(hashAlgorithm.getValue());
+    public String getEncryptedPassword(String password, String salt) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance(hashAlgorithm.getValue());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
         byte[] pw = password.getBytes();
 
         // key-stretching
         for (int i = 0; i < 10000; i++) {
-            String pwSalt = pw + salt;
+            String pwSalt = byteToString(pw) + salt;
             md.update(pwSalt.getBytes());
             pw = md.digest();
         }
