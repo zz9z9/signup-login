@@ -3,13 +3,33 @@
 <head>
     <title>STUDY</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 
 <body>
-아이디 : <input><br>
-비밀번호 : <input><br>
+아이디 : <input id = "userId"><br>
+비밀번호 : <input id = "userPw"><br>
 
-<button>로그인</button>
+<button onclick="login()">로그인</button>
 <button onclick="location.href='signup'">회원가입</button>
+
+<script th:inline="javascript">
+    function login() {
+        const userId = $("#userId").val();
+        const userPw = $("#userPw").val();
+        const memberDto = {
+            userId,
+            userPw
+        };
+        $.ajax({
+            url: '/login',
+            contentType: 'application/json',
+            data: JSON.stringify(memberDto),
+            type: "POST",
+        }).done(function (param) {
+           // alert(param);
+        });
+    }
+</script>
 </body>
 </html>
