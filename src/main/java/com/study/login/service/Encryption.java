@@ -1,6 +1,5 @@
 package com.study.login.service;
 
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public abstract class Encryption {
@@ -15,7 +14,7 @@ public abstract class Encryption {
         this.hashAlgorithm = hashAlgorithm;
     }
 
-    public abstract String getEncryptedPassword(String pw, String salt) throws NoSuchAlgorithmException;
+    public abstract String getEncryptedPassword(String pw, String salt);
 
     public String getSalt() {
         SecureRandom rnd = new SecureRandom();
