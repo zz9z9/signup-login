@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 //            System.out.println("authentication.getName() : "+authentication.getName());
 //            System.out.println("authentication.getPrincipal() : "+authentication.getPrincipal());
 
-            request.setAttribute("userId", authentication.getName());
+            request.setAttribute("loginId", authentication.getName());
         }
 
 

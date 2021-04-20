@@ -36,7 +36,7 @@ public class LoginController {
         return "redirect:/";
     }
 
-    @PostMapping("login")
+    @PostMapping("login/session")
     public String login(@RequestBody Map<String,Object> params, HttpSession session) {
         String id = (String) params.get("userId");
         String pw = (String) params.get("userPw");
@@ -47,9 +47,27 @@ public class LoginController {
         return "redirect:/main";
     }
 
-    @GetMapping("main")
-    public String hello(Model model, HttpServletRequest request) {
+    @PostMapping("login/token")
+    public String login(@RequestBody Map<String,Object> params) {
+        String id = (String) params.get("userId");
+        String pw = (String) params.get("userPw");
+        MemberDto member = new MemberDto(id,pw);
+
+        memberService.login(params);
+
+        return "redirect:/main";
+    }
+
+    @GetMapping("main/session")
+    public String mainPageBySession(Model model, HttpServletRequest request) {
         String loginId = (String) request.getSession().getAttribute("loginId");
+        model.addAttribute("data", loginId);
+        return "main";
+    }
+
+    @GetMapping("main/token")
+    public String mainPageByToken(Model model, HttpServletRequest request) {
+        String loginId = (String) request.getAttribute("loginId");
         model.addAttribute("data", loginId);
         return "main";
     }

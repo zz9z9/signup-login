@@ -4,6 +4,7 @@ import com.study.login.domain.dto.MemberDto;
 import com.study.login.repository.Member;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 public interface MemberService {
 
@@ -12,4 +13,6 @@ public interface MemberService {
     Member find(String id);
 
     void login(MemberDto member, HttpSession session);
+
+    void login(Map<String,Object> params);
 }

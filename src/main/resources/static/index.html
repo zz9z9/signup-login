@@ -10,19 +10,21 @@
 아이디 : <input id = "userId"><br>
 비밀번호 : <input id = "userPw"><br>
 
-<button onclick="login()">로그인</button>
+<button onclick="login('session')">세션 로그인</button>
+<button onclick="login('token')">토큰 로그인</button>
 <button onclick="location.href='signup'">회원가입</button>
 
 <script th:inline="javascript">
-    function login() {
+    function login(param) {
         const userId = $("#userId").val();
         const userPw = $("#userPw").val();
         const memberDto = {
             userId,
             userPw
         };
+        const loginUrl = `/login/${param}`;
         $.ajax({
-            url: '/login',
+            url: loginUrl,
             contentType: 'application/json',
             data: JSON.stringify(memberDto),
             type: "POST",
