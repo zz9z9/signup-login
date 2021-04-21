@@ -11,10 +11,11 @@ import java.util.List;
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     public List loginEssential
-            = Arrays.asList("/main");
+            = Arrays.asList("/main/session");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("AuthenticationInterceptor.preHandle");
         String loginId = (String)request.getSession().getAttribute("loginId");
 
         if(loginId != null) {
