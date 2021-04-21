@@ -19,8 +19,8 @@
         const userId = $("#userId").val();
         const userPw = $("#userPw").val();
         const memberDto = {
-            userId,
-            userPw
+            "id" : userId,
+            "password" : userPw
         };
         const loginUrl = `/login/${param}`;
         $.ajax({

@@ -65,8 +65,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void login(Map<String, Object> params) {
-        String id = (String) params.get("userId");
-        String pw = (String) params.get("userPw");
+        String id = (String) params.get("id");
+        String pw = (String) params.get("password");
         Member findMember = find(id);
 
         if (findMember != null) {
