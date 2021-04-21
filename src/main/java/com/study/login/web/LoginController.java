@@ -37,25 +37,15 @@ public class LoginController {
     }
 
     @PostMapping("login/session")
-    public String login(@RequestBody Map<String,Object> params, HttpSession session) {
-        String id = (String) params.get("userId");
-        String pw = (String) params.get("userPw");
-        MemberDto member = new MemberDto(id,pw);
-
+    public String login(@RequestBody MemberDto member, HttpSession session) {
         memberService.login(member, session);
-
-        return "redirect:/main";
+        return "main";
     }
 
     @PostMapping("login/token")
     public String login(@RequestBody Map<String,Object> params) {
-        String id = (String) params.get("userId");
-        String pw = (String) params.get("userPw");
-        MemberDto member = new MemberDto(id,pw);
-
         memberService.login(params);
-
-        return "redirect:/main";
+        return "main";
     }
 
     @GetMapping("main/session")
