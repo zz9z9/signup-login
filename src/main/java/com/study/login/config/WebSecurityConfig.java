@@ -2,6 +2,7 @@ package com.study.login.config;
 
 import com.study.login.security.jwt.JwtAuthenticationFilter;
 import com.study.login.security.jwt.JwtTokenProvider;
+import com.study.login.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     // 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
     @Bean
@@ -44,10 +46,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
                     .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/main/token/**").hasRole("USER")
+                    .antMatchers("/main/token", "/main/oauth").hasRole("USER")
                     .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                     .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-        // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login()
+                    .userInfoEndpoint()
+                        .userService(customOAuth2UserService);
+
     }
 }
+
