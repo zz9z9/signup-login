@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
@@ -58,9 +59,17 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+        String getToken = "";
+        for(Cookie c : request.getCookies()) {
+            String cookieName = c.getName();
+            if(cookieName.equals("jwtToken")) {
+                getToken = c.getValue();
+                break;
+            }
+        }
+
+        return getToken;
     }
 
     // 토큰의 유효성 + 만료일자 확인

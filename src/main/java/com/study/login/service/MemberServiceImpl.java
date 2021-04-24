@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void login(MemberDto member, HttpSession session) {
+    public void sessionLogin(MemberDto member, HttpSession session) {
         String id = member.getId();
         String pw = member.getPassword();
         Member findMember = find(id);
@@ -64,22 +65,24 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void login(Map<String, Object> params) {
+    public String tokenLogin(Map<String, Object> params) {
         String id = (String) params.get("id");
         String pw = (String) params.get("password");
         Member findMember = find(id);
+        String jwtToken = null;
 
         if (findMember != null) {
             if(isRightPassword(findMember, pw)) {
                 System.out.println("비밀번호 일치! 토큰을 생성합니다");
-                String jwtToken = tokenProvider.createToken(findMember.getUsername(), findMember.getRoles());
-                System.out.println("jwtToken = " + jwtToken);
+                jwtToken = tokenProvider.createToken(findMember.getUsername(), findMember.getRoles());
             } else {
                 System.out.println("비밀번호 불일치!");
             }
         } else {
             System.out.println("일치하는 회원정보 없음 !");
         }
+
+        return jwtToken;
     }
 
     private boolean isRightPassword(Member findMember, String passedPw) {
