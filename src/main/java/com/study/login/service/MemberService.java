@@ -12,7 +12,7 @@ public interface MemberService {
 
     Member find(String id);
 
-    void login(MemberDto member, HttpSession session);
+    void sessionLogin(MemberDto member, HttpSession session);
 
-    void login(Map<String,Object> params);
+    String tokenLogin(Map<String,Object> params);
 }
