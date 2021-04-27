@@ -7,10 +7,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     generate-ddl: true
     show-sql: true
+
   profiles:
     include: oauth
+  devtools:
+    livereload:
+      enabled: true
