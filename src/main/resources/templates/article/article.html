@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+<h1>게시물 작성 페이지</h1>
+작성자 : <input id = "writer" readonly th:value="${userId}"><br>
+글 내용 : <input id = "content"><br>
+<button onclick="submit()">완료</button>
+
+<script th:inline="javascript">
+    function submit() {
+        const writer = $("#writer").val();
+        const content = $("#content").val();
+        const articleDto = {
+            writer,
+            content
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/article/save",
+            data: JSON.stringify(articleDto),
+            dataType: "json",
+            contentType : "application/json"
+        }).done(() => {
+            console.log("success!");
+            location.href = `/article/find/all`;
+        });
+    }
+</script>
+</body>
+</html>

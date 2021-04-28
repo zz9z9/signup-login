@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<table>
+    <thead>
+    <tr>
+        <th> Title </th>
+        <th> Author </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${articles.empty}">
+        <td colspan="2"> 게시물이 없습니다 </td>
+    </tr>
+    <tr th:each="article : ${articles}">
+        <td><span th:text="${article.content}"> content </span></td>
+        <td><span th:text="${article.writer}"> writer </span></td>
+    </tr>
+    </tbody>
+</table>
+<button onclick="location.href='/article/form'">글 작성</button>
+</html>
