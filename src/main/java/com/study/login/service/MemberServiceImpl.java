@@ -28,10 +28,11 @@ public class MemberServiceImpl implements MemberService {
         String encryptedPassword = encryption.getEncryptedPassword(pw, salt);
         ModelMapper modelMapper = new ModelMapper();
         Member memberEntity = modelMapper.map(member, Member.class);
+        String[] roles = member.getId().equals("admin") ? new String[]{"ROLE_ADMIN", "ROLE_MANAGER"} : new String[]{"ROLE_GUEST", "ROLE_VIP"};
 
         memberEntity.setPassword(encryptedPassword);
         memberEntity.setSalt(salt);
-        memberEntity.setRoles(Collections.arrayToList(new String[] {"ROLE_USER"}));
+        memberEntity.setRoles(Collections.arrayToList(roles));
 
         memberRepository.save(memberEntity);
 
@@ -40,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member find(String id) {
-        Member findMember = memberRepository.findById(id);
+        Member findMember = memberRepository.findById(id).orElse(null);
         return findMember;
     }
 
