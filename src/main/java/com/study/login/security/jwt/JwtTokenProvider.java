@@ -22,6 +22,7 @@ import java.util.List;
 @Component
 public class JwtTokenProvider {
 
+    // TODO - 설정파일에서 관리하기
     private String secretKey = "springStudy";
 
     // 토큰 유효시간 30분
@@ -60,12 +61,15 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        String getToken = "";
-        for(Cookie c : request.getCookies()) {
-            String cookieName = c.getName();
-            if(cookieName.equals("jwtToken")) {
-                getToken = c.getValue();
-                break;
+        String getToken = null;
+
+        if(request.getCookies()!=null) {
+            for(Cookie c : request.getCookies()) {
+                String cookieName = c.getName();
+                if(cookieName.equals("jwtToken")) {
+                    getToken = c.getValue();
+                    break;
+                }
             }
         }
 
