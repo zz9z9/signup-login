@@ -2,13 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <title>게시판</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
+<body>
 <table>
     <thead>
     <tr>
-        <th> Title </th>
-        <th> Author </th>
+        <th> 작성자 </th>
+        <th> 글 제목 </th>
     </tr>
     </thead>
     <tbody>
@@ -16,10 +18,36 @@
         <td colspan="2"> 게시물이 없습니다 </td>
     </tr>
     <tr th:each="article : ${articles}">
-        <td><span th:text="${article.content}"> content </span></td>
-        <td><span th:text="${article.writer}"> writer </span></td>
+        <td>
+            <span th:text="${article.writer}"/>
+        </td>
+        <td>
+            <a th:href="@{/article/detail/{id}(id=${article.id})}" th:text="${article.content}"/>
+        </td>
+        <td th:if="${loginId}==${article.writer}">
+            <button th:onclick="'remove('+${article.id}+')'" th:text="삭제"/>
+        </td>
     </tr>
     </tbody>
 </table>
 <button onclick="location.href='/article/form'">글 작성</button>
+<script th:inline="javascript">
+    function remove(articleId) {
+        console.log("id : ",articleId);
+        const obj = {
+            articleId
+        };
+        $.ajax({
+            type: "POST",
+            url: "/article/remove",
+            data: JSON.stringify(obj),
+            dataType: "json",
+            contentType : "application/json"
+        }).done(() => {
+            console.log("success!");
+            location.href = `/article/find/all`;
+        });
+    }
+</script>
+</body>
 </html>

@@ -7,15 +7,22 @@
 </head>
 <body>
 <h1>게시물 작성 페이지</h1>
-작성자 : <input id = "writer" readonly th:value="${userId}"><br>
-글 내용 : <input id = "content"><br>
-<button onclick="submit()">완료</button>
+<div th:object="${article}">
+<input id="articleId" type="hidden" th:value="${article.id}"/>
+작성자 : <input id = "writer" readonly th:value="${article.writer} ? ${article.writer} : ${userId}"><br>
+글 내용 : <input id = "content" th:value="${article} ? ${article.content} : ''"><br>
+<button th:if="${article.writer}==${loginId}" onclick="submit()">수정</button>
+<button th:unless="${article.id}" onclick="submit()">등록</button>
+</div>
+
 
 <script th:inline="javascript">
     function submit() {
+        const id = $("#articleId").val();
         const writer = $("#writer").val();
         const content = $("#content").val();
         const articleDto = {
+            id,
             writer,
             content
         };
