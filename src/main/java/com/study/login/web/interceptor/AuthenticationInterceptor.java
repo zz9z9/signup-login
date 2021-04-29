@@ -1,5 +1,6 @@
-package com.study.login.web;
+package com.study.login.web.interceptor;
 
+import com.study.login.domain.dto.SessionUser;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,14 +12,14 @@ import java.util.List;
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     public List loginEssential
-            = Arrays.asList("/main/session");
+            = Arrays.asList("/main/session", "/main/third-party");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("AuthenticationInterceptor.preHandle");
         String loginId = (String)request.getSession().getAttribute("loginId");
+        SessionUser user = (SessionUser) request.getSession().getAttribute("user");
 
-        if(loginId != null) {
+        if(loginId != null || user!=null) {
             return true;
         } else{
             String destUri = request.getRequestURI();

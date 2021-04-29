@@ -1,4 +1,4 @@
-package com.study.login.service;
+package com.study.login.service.impl;
 
 import com.study.login.repository.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;

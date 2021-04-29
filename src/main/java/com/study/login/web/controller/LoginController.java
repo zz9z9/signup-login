@@ -1,74 +1,65 @@
-package com.study.login.web;
+package com.study.login.web.controller;
 
 import com.study.login.domain.dto.MemberDto;
 import com.study.login.domain.dto.SessionUser;
-import com.study.login.service.MemberService;
-import org.springframework.boot.web.servlet.server.Session;
+import com.study.login.service.spec.LoginService;
+import com.study.login.service.spec.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.net.http.HttpResponse;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Controller
 public class LoginController {
 
-    private final MemberService memberService;
-
-    public LoginController(MemberService memberService) {
-        this.memberService = memberService;
-    }
+    private final LoginService loginService;
 
     @GetMapping("/")
     public String index(Model model, HttpSession httpSession) {
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-        if(user != null) {
-            return "redirect:/main/third-party";
-        }
+//        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+//        if(user != null) {
+//            return "redirect:/main/third-party";
+//        }
 
         return "index";
     }
 
-    @GetMapping("signup")
-    public String signup() {
-        return "signup";
-    }
-
-    @PostMapping("signup")
-    public String signUp(@RequestBody Map<String,Object> params) {
-        String id = (String) params.get("userId");
-        String pw = (String) params.get("userPw");
-
-        memberService.save(new MemberDto(id,pw));
-
-        return "redirect:/";
-    }
-
     @PostMapping("login/session")
     public String login(@RequestBody MemberDto member, HttpSession session) {
-        memberService.sessionLogin(member, session);
+        loginService.sessionLogin(member, session);
         return "redirect:/main/session";
     }
 
     @PostMapping("login/token")
     public String login(@RequestBody Map<String,Object> params, HttpServletResponse response) {
-        String jwtToken = memberService.tokenLogin(params);
-        Cookie cookie = new Cookie("jwtToken", jwtToken);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
+        String jwtToken = loginService.tokenLogin(params);
 
-        response.addCookie(cookie);
+        if(jwtToken!=null) {
+            System.out.println("jwtToken = " + jwtToken);
+            Cookie cookie = new Cookie("jwtToken", jwtToken);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+
+            response.addCookie(cookie);
+        }
 
         return "main";
+    }
+
+    @GetMapping("/success/test")
+    public String test(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("LoginController.test");
+
+        return "test";
     }
 
     @GetMapping("main/session")

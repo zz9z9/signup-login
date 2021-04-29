@@ -1,9 +1,7 @@
-package com.study.login.repository;
+package com.study.login.repository.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.study.login.repository.converter.StringListConverter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -22,14 +21,31 @@ import java.util.stream.Collectors;
 public class Member implements UserDetails {
 
     @Id
+    @Column(name = "member_id")
     private String id;
     @Column
     private String password;
     @Column
     private String salt;
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+//    @OneToMany(mappedBy = "writer")
+//    private List<Article> articles;
+
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    @Builder.Default
+//    private List<String> roles = new ArrayList<>();
+
+    @Column
+    @Convert(converter = StringListConverter.class)
+    private List<String> roles;
+
+    @Builder
+    public Member(String id) {
+        this.id = id;
+    }
+
+    public Member() {
+
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
