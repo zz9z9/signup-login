@@ -1,5 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
 <head>
     <meta charset="UTF-8">
     <title>메인</title>
@@ -9,5 +12,6 @@
 <p th:text="'안녕하세요 ' + ${data} + ' 님'"/> <br>
 
 <button onclick="location.href='/article/find/all'">글 목록</button>
+<button sec:authorize="hasAnyRole('ADMIN','MANAGER')" onclick="location.href='/admin'">관리자 페이지</button>
 </body>
 </html>
