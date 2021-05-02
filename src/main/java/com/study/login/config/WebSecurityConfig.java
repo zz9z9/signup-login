@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -45,15 +46,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
                     .and()
                 .authorizeRequests() // 요청에 대한 사용권한 체크
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/main/token", "/main/oauth").hasRole("USER")
-                    .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
+                    .antMatchers("/admin/**").hasAnyRole("ADMIN","MANAGER")
+                    .antMatchers("/main/**").authenticated()
+                    .antMatchers("/article/**").authenticated()
+                    // .antMatchers("/signup").permitAll()
+                    .anyRequest().permitAll() // 그 외 나머지 요청은 누구나 접근 가능
                     .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .oauth2Login()
-                    .userInfoEndpoint()
-                        .userService(customOAuth2UserService);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+//                .oauth2Login()
+//                    .defaultSuccessUrl("/success/test")
+//                        .userInfoEndpoint()
+//                            .userService(customOAuth2UserService);
 
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/signup", "/");
     }
 }
 
