@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org" lang="ko"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th> 회원 ID </th>
+        <th> 권한 </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="member: ${members}">
+        <td>
+            <span th:text="${member.id}"/>
+        </td>
+        <td>
+            <span th:text="${member.roles}"/>
+        </td>
+        <td sec:authorize="hasRole('ADMIN')" th:unless="${#lists.contains(member.roles, 'ROLE_MANAGER')}">
+            <button th:onclick="updateRole( [[${member.id}]], 'ROLE_MANAGER' )">관리자 권한 부여</button>
+        </td>
+        <td sec:authorize="hasRole('ADMIN')"
+            th:if="${#lists.contains(member.roles, 'ROLE_MANAGER') and member.id!='admin'}">
+            <button th:onclick="updateRole( [[${member.id}]], 'ROLE_GUEST' )">관리자 권한 회수</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script th:inline="javascript">
+    function updateRole(memberId, role) {
+        console.log("id : ",memberId);
+        const roles = [role];
+        //arr.push(memberId);
+
+        const obj = {
+            memberId,
+            roles
+        };
+        $.ajax({
+            type: "POST",
+            url: "/admin/update/role",
+            data: JSON.stringify(obj),
+            dataType: "json",
+            contentType : "application/json"
+        }).success(() => {
+            console.log("success!");
+        });
+    }
+</script>
+</body>
+</html>
