@@ -1,6 +1,6 @@
 package com.study.login.config;
 
-import com.study.login.web.AuthenticationInterceptor;
+import com.study.login.web.interceptor.AuthenticationInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

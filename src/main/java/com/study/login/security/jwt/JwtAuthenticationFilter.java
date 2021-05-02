@@ -1,6 +1,5 @@
 package com.study.login.security.jwt;
 
-import com.study.login.repository.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
